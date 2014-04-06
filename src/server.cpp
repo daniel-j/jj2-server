@@ -1,4 +1,5 @@
 #include "server.h"
+#include <QCoreApplication>
 
 Server::Server() {
 	this->port = 0;
@@ -51,6 +52,8 @@ void Server::tcpConnectClient() {
 
 	connect(newClient, SIGNAL(readyRead()), this, SLOT(tcpProcessPackets()));
 	connect(newClient, SIGNAL(disconnected()), this, SLOT(tcpDisconnectClient()));
+
+	QCoreApplication::quit();
 }
 
 void Server::tcpProcessPackets() {
