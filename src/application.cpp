@@ -5,7 +5,6 @@ Application::Application(QStringList args) : settings(QCoreApplication::applicat
 	this->server = NULL;
 	this->cc = new ConsoleCommands(this);
 
-
 	connect(this->cc, SIGNAL(stop()), this, SLOT(quit()));
 }
 
@@ -19,14 +18,13 @@ void Application::quit() {
 }
 
 void Application::startServer() {
-	this->server = new Server();
+	this->server = new Server(this);
 	this->server->setPort(settings.value("server/port").toInt());
 	this->server->start();
 }
 
 void Application::stopServer() {
 	if (this->server != NULL) {
-		this->server->stop();
 		delete this->server;
 		this->server = NULL;
 	}

@@ -16,6 +16,7 @@ class Application : public QObject {
 
 	private:
 		Server* server;
+
 		QStringList args;
 		QSettings settings;
 		ConsoleCommands* cc;
@@ -25,10 +26,10 @@ class Application : public QObject {
 		virtual ~Application();
 
 		void startServer();
-
 		//void logStatusMessage(QVariant msg);
 
 	signals:
+		void log(QString str);
 
 	public slots:
 		void stopServer();

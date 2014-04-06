@@ -1,4 +1,4 @@
-JJ2 dedicated server written in Qt & C++
+JJ2 dedicated server in C++ (Qt)
 ===
 
 How to build

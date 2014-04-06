@@ -3,7 +3,7 @@
 
 #include <QTcpServer>
 #include <QTcpSocket>
-
+#include <QUdpSocket>
 
 class Server : public QObject {
 
@@ -13,6 +13,7 @@ class Server : public QObject {
 		QTcpServer* tcpServer;
 		QList<QTcpSocket *> tcpClientsList;
 		QTcpSocket* listserverSock; // Socket to the listserver
+		QUdpSocket* udpSocket;
 		unsigned short port;
 
 	public:
@@ -28,6 +29,8 @@ class Server : public QObject {
 		void tcpConnectClient();
 		void tcpProcessPackets();
 		void tcpDisconnectClient();
+
+		void udpProcessPackets();
 
 
 };
