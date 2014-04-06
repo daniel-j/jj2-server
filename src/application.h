@@ -1,10 +1,14 @@
 #ifndef APPLICATION_H
 #define APPLICATION_H
 
+#define DATA_DIR "../data"
+#define SETTINGS_FILE "settings.ini"
+
 #include <QCoreApplication>
 #include <QSettings>
 
 #include "server.h"
+#include "consolecommands.h"
 
 class Application : public QObject {
 
@@ -14,18 +18,21 @@ class Application : public QObject {
 		Server* server;
 		QStringList args;
 		QSettings settings;
+		ConsoleCommands* cc;
+
 	public:
 		Application(QStringList args);
 		virtual ~Application();
 
 		void startServer();
-		void stopServer();
 
 		//void logStatusMessage(QVariant msg);
 
 	signals:
 
 	public slots:
+		void stopServer();
+		void quit();
 
 };
 

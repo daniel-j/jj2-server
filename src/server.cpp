@@ -1,7 +1,6 @@
 #include "server.h"
-#include <QCoreApplication>
 
-Server::Server() {
+Server::Server(QObject *parent) : QObject(parent) {
 	this->port = 0;
 	this->tcpServer = NULL;
 	this->listserverSock = NULL;
@@ -15,19 +14,20 @@ void Server::setPort(int port) {
 	this->port = (unsigned int) port;
 }
 
-void Server::start() {
+bool Server::start() {
 	this->tcpServer = new QTcpServer(this);
 	qDebug() << "Starting TCP server on port" << this->port;
 	if (!this->tcpServer->listen(QHostAddress::Any, this->port)) {
 		qDebug() << "Starting TCP server failed!" << endl;
-		return;
+		return false;
 	}
 	connect(this->tcpServer, SIGNAL(newConnection()), this, SLOT(tcpConnectClient()));
+	return true;
 }
 
 void Server::stop() {
-	qDebug() << "Stopping server..";
 	if (this->tcpServer != NULL) {
+		qDebug() << "Stopping server..";
 		tcpServer->close();
 		for (int i = 0; i < this->tcpClientsList.size(); i++) {
 			this->tcpClientsList[i]->close();
@@ -53,7 +53,7 @@ void Server::tcpConnectClient() {
 	connect(newClient, SIGNAL(readyRead()), this, SLOT(tcpProcessPackets()));
 	connect(newClient, SIGNAL(disconnected()), this, SLOT(tcpDisconnectClient()));
 
-	QCoreApplication::quit();
+	qDebug() << "client connected";
 }
 
 void Server::tcpProcessPackets() {
@@ -67,13 +67,13 @@ void Server::tcpProcessPackets() {
 }
 
 void Server::tcpDisconnectClient() {
-	// Find who's disconnecting, if we can't, just give up
+	// Find who's disconnecting
 	QTcpSocket *socket = qobject_cast<QTcpSocket *>(sender());
 	if (socket == 0) {
 		return;
 	}
 
-	qDebug() << "socket disconnected";
+	qDebug() << "client disconnected";
 	disconnect(socket);
 	this->tcpClientsList.removeOne(socket);
 }

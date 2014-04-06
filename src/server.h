@@ -16,12 +16,12 @@ class Server : public QObject {
 		unsigned short port;
 
 	public:
-		Server();
+		explicit Server(QObject *parent = 0);
 		virtual ~Server();
 
 		void setPort(int port);
 
-		void start();
+		bool start();
 		void stop();
 
 	private slots:

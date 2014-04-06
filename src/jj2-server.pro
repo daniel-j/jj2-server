@@ -17,8 +17,10 @@ TEMPLATE = app
 
 SOURCES += main.cpp \
     application.cpp \
-    server.cpp
+    server.cpp \
+    consolecommands.cpp
 
 HEADERS += \
     application.h \
-    server.h
+    server.h \
+    consolecommands.h
