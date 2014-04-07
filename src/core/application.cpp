@@ -1,19 +1,18 @@
 #include "application.h"
 
 Application::Application(QStringList args) :
-	settings(QCoreApplication::applicationDirPath()+"/"+DATA_DIR+"/"+SETTINGS_FILE,
-	QSettings::IniFormat
-) {
+	settings(QCoreApplication::applicationDirPath()+"/"+DATA_DIR+"/"+SETTINGS_FILE,	QSettings::IniFormat)
+{
 	this->args = args;
 	this->server = NULL;
-	this->cc = new ConsoleCommands(this);
+	//this->cc = new ConsoleCommands(this);
 
-	connect(this->cc, SIGNAL(stop()), this, SLOT(quit()));
+	//connect(this->cc, SIGNAL(stop()), this, SLOT(quit()));
 }
 
 Application::~Application() {
 	this->stopServer();
-	delete this->cc;
+	//delete this->cc;
 }
 
 void Application::quit() {

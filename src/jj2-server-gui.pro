@@ -4,21 +4,23 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core network gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = gui
+TARGET = jj2-server-gui
 TEMPLATE = app
 
 
 SOURCES += gui/main.cpp\
-        gui/widget.cpp \
     core/application.cpp \
-    core/server.cpp
+    core/server.cpp \
+    gui/mainwindow.cpp
 
-HEADERS  += gui/widget.h \
+HEADERS  += \
     core/application.h \
-    core/server.h
+    core/server.h \
+    gui/mainwindow.h
 
-FORMS    += gui/widget.ui
+FORMS    += \
+    gui/mainwindow.ui

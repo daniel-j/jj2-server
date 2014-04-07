@@ -8,7 +8,7 @@ QT       += core network
 
 QT       -= gui
 
-TARGET = jj2-server
+TARGET = jj2-server-console
 CONFIG   += console
 CONFIG   -= app_bundle
 

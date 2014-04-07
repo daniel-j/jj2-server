@@ -8,7 +8,7 @@
 #include <QSettings>
 
 #include "server.h"
-#include "consolecommands.h"
+//#include "consolecommands.h"
 
 class Application : public QObject {
 
@@ -19,7 +19,7 @@ class Application : public QObject {
 
 		QStringList args;
 		QSettings settings;
-		ConsoleCommands* cc;
+		//ConsoleCommands* cc;
 
 	public:
 		Application(QStringList args);
