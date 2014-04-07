@@ -1,4 +1,5 @@
 #include <QCoreApplication>
+#include "mainwidget.h"
 #include "application.h"
 
 

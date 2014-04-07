@@ -14,15 +14,15 @@ CONFIG   -= app_bundle
 
 TEMPLATE = app
 
-
-SOURCES += main.cpp \
-    application.cpp \
-    server.cpp \
-    consolecommands.cpp \
-    logger.cpp
+SOURCES += \
+    core/application.cpp \
+    core/server.cpp \
+    console/consolecommands.cpp \
+    console/logger.cpp \
+    console/main.cpp
 
 HEADERS += \
-    application.h \
-    server.h \
-    consolecommands.h \
-    logger.h
+    core/application.h \
+    core/server.h \
+    console/consolecommands.h \
+    console/logger.h

@@ -1,6 +1,9 @@
 #include "application.h"
 
-Application::Application(QStringList args) : settings(QCoreApplication::applicationDirPath()+"/"+DATA_DIR+"/"+SETTINGS_FILE, QSettings::IniFormat) {
+Application::Application(QStringList args) :
+	settings(QCoreApplication::applicationDirPath()+"/"+DATA_DIR+"/"+SETTINGS_FILE,
+	QSettings::IniFormat
+) {
 	this->args = args;
 	this->server = NULL;
 	this->cc = new ConsoleCommands(this);
