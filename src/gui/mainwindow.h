@@ -22,6 +22,7 @@ class MainWindow : public QMainWindow {
 
 	private slots:
 		void log(QString msg);
+		void gotCommand();
 		void quitSlot();
 };
 

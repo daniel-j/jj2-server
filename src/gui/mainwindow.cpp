@@ -10,6 +10,8 @@ MainWindow::MainWindow(QWidget *parent) :
 	connect(app, SIGNAL(logSignal(QString)), this, SLOT(log(QString)));
 	connect(app, SIGNAL(quitSignal()), this, SLOT(quitSlot()));
 
+	connect(ui->consoleInput, SIGNAL(returnPressed()), this, SLOT(gotCommand()));
+
 	app->startServer();
 }
 
@@ -21,6 +23,12 @@ MainWindow::~MainWindow() {
 void MainWindow::log(QString msg) {
 	ui->consoleOutput->appendPlainText(msg);
 	ui->consoleOutput->repaint();
+}
+
+void MainWindow::gotCommand() {
+	QString str = ui->consoleInput->text();
+	ui->consoleInput->clear();
+	app->runCommand(str);
 }
 
 void MainWindow::quitSlot() {
