@@ -1,26 +1,40 @@
 #include "application.h"
+#include <QDir>
 
-Application::Application(QStringList args) :
-	settings(QCoreApplication::applicationDirPath()+"/"+DATA_DIR+"/"+SETTINGS_FILE,	QSettings::IniFormat)
+Application::Application(QStringList args, QObject* parent) :
+	QObject(parent),
+	settings(QDir::currentPath()+"/"+DATA_DIR+"/"+SETTINGS_FILE, QSettings::IniFormat)
 {
 	this->args = args;
 	this->server = NULL;
-	//this->cc = new ConsoleCommands(this);
-
-	//connect(this->cc, SIGNAL(stop()), this, SLOT(quit()));
 }
 
 Application::~Application() {
 	this->stopServer();
-	//delete this->cc;
+}
+
+void Application::log(QVariant msg) {
+	QString str = Logger::log(msg);
+	emit logSignal(str);
+}
+void Application::logSlot(QVariant msg) {
+	this->log(msg);
 }
 
 void Application::quit() {
-	QCoreApplication::quit();
+	emit quitSignal();
+}
+
+void Application::runCommand(QString cmd) {
+	if (cmd == "quit") {
+		quit();
+	}
 }
 
 void Application::startServer() {
+	log("App: Starting server");
 	this->server = new Server(this);
+	connect(this->server, SIGNAL(log(QVariant)), this, SLOT(logSlot(QVariant)));
 	this->server->setPort(settings.value("server/port").toInt());
 	this->server->start();
 }
@@ -31,10 +45,3 @@ void Application::stopServer() {
 		this->server = NULL;
 	}
 }
-
-
-
-/*void Application::logStatusMessage(QVariant msg) {
-	qDebug() << msg << endl;
-}*/
-

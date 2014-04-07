@@ -1,7 +1,8 @@
 #include "server.h"
-#include "application.h"
 
-Server::Server(QObject *parent) : QObject(parent) {
+Server::Server(QObject* parent) :
+	QObject(parent)
+{
 	this->port = 0;
 	this->tcpServer = NULL;
 	this->listserverSock = NULL;
@@ -10,23 +11,22 @@ Server::~Server() {
 	this->stop();
 }
 
-
 void Server::setPort(int port) {
 	this->port = (unsigned int) port;
 }
 
 bool Server::start() {
 	this->tcpServer = new QTcpServer(this);
-	qDebug() << "TCP: Starting server on port" << this->port << "...";
+	log("TCP: Starting server on port "+QString().setNum(this->port)+" ...");
 	if (!this->tcpServer->listen(QHostAddress::Any, this->port)) {
 		qDebug() << "TCP: Unable to start server" << endl;
 		this->stop();
 		return false;
 	}
-	qDebug() << "UDP: Starting server on port" << this->port << "...";
+	log("UDP: Starting server on port"+QString().setNum(this->port)+"...");
 	this->udpSocket = new QUdpSocket(this);
 	if (!udpSocket->bind(this->port, QUdpSocket::ReuseAddressHint|QUdpSocket::DontShareAddress)) {
-		qDebug() << "UDP: Unable to start server";
+		log("UDP: Unable to start server");
 		this->stop();
 		return false;
 	}
@@ -37,7 +37,7 @@ bool Server::start() {
 
 void Server::stop() {
 	if (this->tcpServer != NULL) {
-		qDebug() << "TCP: Stopping server..";
+		log("TCP: Stopping server..");
 		tcpServer->close();
 		for (int i = 0; i < this->tcpClientsList.size(); i++) {
 			// else the disconnect slot is called when closing server
@@ -53,14 +53,14 @@ void Server::stop() {
 	}
 
 	if (this->udpSocket != NULL) {
-		qDebug() << "UDP: Stopping server..";
+		log("UDP: Stopping server..");
 		this->udpSocket->close();
 		delete this->udpSocket;
 		this->udpSocket = NULL;
 	}
 
 	if (this->listserverSock != NULL) {
-		qDebug() << "LIST: Disconnecting from listserver";
+		log("LIST: Disconnecting from listserver");
 		this->listserverSock->close();
 		delete this->listserverSock;
 		this->listserverSock = NULL;
@@ -74,7 +74,7 @@ void Server::tcpConnectClient() {
 	connect(newClient, SIGNAL(readyRead()), this, SLOT(tcpProcessPackets()));
 	connect(newClient, SIGNAL(disconnected()), this, SLOT(tcpDisconnectClient()));
 
-	qDebug() << "TCP: Client connected";
+	log("TCP: Client connected");
 }
 
 void Server::tcpProcessPackets() {
@@ -84,7 +84,7 @@ void Server::tcpProcessPackets() {
 		return;
 	}
 
-	qDebug() << "TCP: Data:" << socket->readAll();
+	log("TCP: Data: " + socket->readAll());
 }
 
 void Server::tcpDisconnectClient() {
@@ -94,7 +94,7 @@ void Server::tcpDisconnectClient() {
 		return;
 	}
 
-	qDebug() << "TCP: Client disconnected";
+	log("TCP: Client disconnected");
 	disconnect(socket);
 	this->tcpClientsList.removeOne(socket);
 }
@@ -122,6 +122,6 @@ void Server::udpProcessPackets() {
 			}
 		}
 
-		qDebug() << "UDP: Packet id" << (int)datagram[1];
+		log("UDP: Packet id: "+QString().setNum(datagram[1]));
 	}
 }

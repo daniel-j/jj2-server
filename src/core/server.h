@@ -25,6 +25,9 @@ class Server : public QObject {
 		bool start();
 		void stop();
 
+	signals:
+		void log(QVariant msg);
+
 	private slots:
 		void tcpConnectClient();
 		void tcpProcessPackets();

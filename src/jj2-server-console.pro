@@ -17,12 +17,12 @@ TEMPLATE = app
 SOURCES += \
     core/application.cpp \
     core/server.cpp \
-    console/consolecommands.cpp \
-    console/logger.cpp \
-    console/main.cpp
+    console/main.cpp \
+    core/logger.cpp \
+    console/consolewrapper.cpp
 
 HEADERS += \
     core/application.h \
     core/server.h \
-    console/consolecommands.h \
-    console/logger.h
+    core/logger.h \
+    console/consolewrapper.h

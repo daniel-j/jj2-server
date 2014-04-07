@@ -15,12 +15,14 @@ TEMPLATE = app
 SOURCES += gui/main.cpp\
     core/application.cpp \
     core/server.cpp \
-    gui/mainwindow.cpp
+    gui/mainwindow.cpp \
+    core/logger.cpp
 
 HEADERS  += \
     core/application.h \
     core/server.h \
-    gui/mainwindow.h
+    gui/mainwindow.h \
+    core/logger.h
 
 FORMS    += \
     gui/mainwindow.ui

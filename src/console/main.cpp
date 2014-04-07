@@ -1,13 +1,10 @@
 #include <QCoreApplication>
-#include "mainwidget.h"
-#include "application.h"
-
+#include "console/consolewrapper.h"
 
 int main(int argc, char *argv[]) {
 	QCoreApplication a(argc, argv);
-	Application app(a.arguments());
-
-	app.startServer();
+	ConsoleWrapper cw(&a);
 
 	return a.exec();
 }
+

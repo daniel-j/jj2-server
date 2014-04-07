@@ -11,7 +11,10 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>JJ2 dedicated server</string>
+  </property>
+  <property name="windowOpacity">
+   <double>1.000000000000000</double>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
@@ -23,12 +26,17 @@
       <widget class="QWidget" name="layoutWidget">
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
-         <widget class="QPlainTextEdit" name="consoleInput">
+         <widget class="QPlainTextEdit" name="consoleOutput">
           <property name="minimumSize">
            <size>
             <width>200</width>
             <height>50</height>
            </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>8</pointsize>
+           </font>
           </property>
           <property name="readOnly">
            <bool>true</bool>
@@ -36,7 +44,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QLineEdit" name="consoleOutput"/>
+         <widget class="QLineEdit" name="consoleInput"/>
         </item>
        </layout>
       </widget>
@@ -76,7 +84,7 @@
             <property name="orientation">
              <enum>Qt::Vertical</enum>
             </property>
-            <widget class="QListView" name="playerList">
+            <widget class="QColumnView" name="playerList">
              <property name="enabled">
               <bool>true</bool>
              </property>
@@ -123,6 +131,11 @@
           <string>Server settings</string>
          </attribute>
         </widget>
+        <widget class="QWidget" name="tab_3">
+         <attribute name="title">
+          <string>Levellist</string>
+         </attribute>
+        </widget>
        </widget>
       </widget>
      </widget>
@@ -158,5 +171,22 @@
   </action>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>actionQuit</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>494</x>
+     <y>286</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

@@ -4,11 +4,11 @@
 #define DATA_DIR "../data"
 #define SETTINGS_FILE "settings.ini"
 
-#include <QCoreApplication>
 #include <QSettings>
 
+#include "logger.h"
 #include "server.h"
-//#include "consolecommands.h"
+
 
 class Application : public QObject {
 
@@ -22,18 +22,23 @@ class Application : public QObject {
 		//ConsoleCommands* cc;
 
 	public:
-		Application(QStringList args);
+		explicit Application(QStringList args, QObject *parent = 0);
 		virtual ~Application();
 
 		void startServer();
-		//void logStatusMessage(QVariant msg);
+		void log(QVariant msg);
+
+		void runCommand(QString cmd);
+
+		void quit();
 
 	signals:
-		void log(QString str);
+		void logSignal(QString msg);
+		void quitSignal();
 
 	public slots:
 		void stopServer();
-		void quit();
+		void logSlot(QVariant msg);
 
 };
 
