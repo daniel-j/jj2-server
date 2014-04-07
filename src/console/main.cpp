@@ -3,7 +3,7 @@
 
 int main(int argc, char *argv[]) {
 	QCoreApplication a(argc, argv);
-	ConsoleWrapper cw(&a);
+	ConsoleWrapper cw;
 
 	return a.exec();
 }
