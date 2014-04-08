@@ -5,6 +5,7 @@ Server::Server(QObject* parent) :
 {
 	this->port = 0;
 	this->tcpServer = NULL;
+	this->udpSocket = NULL;
 	this->listserverSock = NULL;
 }
 Server::~Server() {
@@ -19,7 +20,7 @@ bool Server::start() {
 	this->tcpServer = new QTcpServer(this);
 	log("TCP: Starting server on port "+QString().setNum(this->port)+" ...");
 	if (!this->tcpServer->listen(QHostAddress::Any, this->port)) {
-		qDebug() << "TCP: Unable to start server" << endl;
+		log("TCP: Unable to start server");
 		this->stop();
 		return false;
 	}
@@ -27,6 +28,7 @@ bool Server::start() {
 	this->udpSocket = new QUdpSocket(this);
 	if (!udpSocket->bind(this->port, QUdpSocket::ReuseAddressHint|QUdpSocket::DontShareAddress)) {
 		log("UDP: Unable to start server");
+
 		this->stop();
 		return false;
 	}

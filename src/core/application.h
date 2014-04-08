@@ -1,7 +1,7 @@
 #ifndef APPLICATION_H
 #define APPLICATION_H
 
-#define DATA_DIR "../data"
+#define DATA_DIR "data"
 #define SETTINGS_FILE "settings.ini"
 
 #include <QSettings>
