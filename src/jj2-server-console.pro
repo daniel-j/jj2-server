@@ -26,3 +26,15 @@ HEADERS += \
     core/server.h \
     core/logger.h \
     console/consolewrapper.h
+
+CONFIG(debug, debug|release) {
+	DESTDIR = ../build-$${TARGET}-release
+} else {
+	DESTDIR = ../build-$${TARGET}-release
+}
+
+OBJECTS_DIR = $${DESTDIR}/.obj
+MOC_DIR = $${DESTDIR}/.moc
+RCC_DIR = $${DESTDIR}/.rcc
+UI_DIR = $${DESTDIR}/.ui
+
