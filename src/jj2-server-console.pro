@@ -19,16 +19,18 @@ SOURCES += \
     core/server.cpp \
     console/main.cpp \
     core/logger.cpp \
-    console/consolewrapper.cpp
+    console/consolewrapper.cpp \
+    core/listserver.cpp
 
 HEADERS += \
     core/application.h \
     core/server.h \
     core/logger.h \
-    console/consolewrapper.h
+    console/consolewrapper.h \
+    core/listserver.h
 
 CONFIG(debug, debug|release) {
-	DESTDIR = ../build-$${TARGET}-release
+	DESTDIR = ../build-$${TARGET}-debug
 } else {
 	DESTDIR = ../build-$${TARGET}-release
 }

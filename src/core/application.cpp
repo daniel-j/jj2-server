@@ -20,6 +20,9 @@ void Application::log(QVariant msg) {
 void Application::logSlot(QVariant msg) {
 	this->log(msg);
 }
+QVariant Application::config(QString key) {
+	return settings.value(key);
+}
 
 void Application::quit() {
 	emit quitSignal();
@@ -35,6 +38,7 @@ void Application::startServer() {
 	log("App: Starting server");
 	this->server = new Server(this);
 	connect(this->server, SIGNAL(log(QVariant)), this, SLOT(logSlot(QVariant)));
+	connect(this->server, SIGNAL(config(QString)), this, SLOT(config(QString)));
 	this->server->setPort(settings.value("server/port").toInt());
 	this->server->start();
 }

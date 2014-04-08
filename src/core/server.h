@@ -27,6 +27,7 @@ class Server : public QObject {
 
 	signals:
 		void log(QVariant msg);
+		QVariant config(QString key);
 
 	private slots:
 		void tcpConnectClient();

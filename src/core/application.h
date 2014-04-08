@@ -39,6 +39,7 @@ class Application : public QObject {
 	public slots:
 		void stopServer();
 		void logSlot(QVariant msg);
+		QVariant config(QString key);
 
 };
 

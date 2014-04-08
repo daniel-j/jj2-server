@@ -24,7 +24,7 @@ bool Server::start() {
 		this->stop();
 		return false;
 	}
-	log("UDP: Starting server on port"+QString().setNum(this->port)+"...");
+	log("UDP: Starting server on port "+QString().setNum(this->port)+" ...");
 	this->udpSocket = new QUdpSocket(this);
 	if (!udpSocket->bind(this->port, QUdpSocket::ReuseAddressHint|QUdpSocket::DontShareAddress)) {
 		log("UDP: Unable to start server");
@@ -32,6 +32,17 @@ bool Server::start() {
 		this->stop();
 		return false;
 	}
+	this->listserverSock = new QTcpSocket(this);
+	this->listserverSock->connectToHost(config("listserver/host").toString(), 10054);
+
+	connect(this->listserverSock, SIGNAL(connected()), this, SLOT(listConnected()));
+	connect(this->listserverSock, SIGNAL(readyRead()),this, SLOT(listProcessPackets()));
+	connect(this->listserverSock, SIGNAL(disconnected()),this, SLOT(listDisconnected()));
+	/*{
+		log("LIST: Could not connect to listserver");
+		delete this->listserverSock;
+		this->listserverSock = NULL;
+	}*/
 	connect(this->tcpServer, SIGNAL(newConnection()), this, SLOT(tcpConnectClient()));
 	connect(this->udpSocket, SIGNAL(readyRead()),this, SLOT(udpProcessPackets()));
 	return true;
