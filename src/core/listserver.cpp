@@ -150,7 +150,7 @@ void Listserver::listDisconnected() {
 		QTimer::singleShot(0, this, SLOT(listReconnect()));
 
 	} else if (this->unexpectedDisconnect) {
-		qDebug() << "UNEXPECTED DISCONNECT!";
+		qDebug() << "LIST: Server closed connection";
 
 		this->reconnectTimer->start();
 	}
