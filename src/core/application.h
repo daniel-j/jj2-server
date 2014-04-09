@@ -25,7 +25,7 @@ class Application : public QObject {
 		explicit Application(QStringList args, QObject *parent = 0);
 		virtual ~Application();
 
-		void startServer();
+
 		void log(QVariant msg);
 
 		void runCommand(QString cmd);
@@ -36,8 +36,13 @@ class Application : public QObject {
 		void logSignal(QString msg);
 		void quitSignal();
 
+		void list();
+		void delist();
+		void relist();
+
 	public slots:
 		void stopServer();
+		void startServer();
 		void logSlot(QVariant msg);
 		QVariant config(QString key, QVariant def = 0);
 

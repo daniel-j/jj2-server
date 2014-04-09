@@ -8,7 +8,7 @@ Server::Server(QObject* parent) :
 	connect(this, SIGNAL(log(QVariant)), this->parent(), SLOT(logSlot(QVariant)));
 	connect(this, SIGNAL(config(QString, QVariant)), this->parent(), SLOT(config(QString, QVariant)));
 
-	this->port = config("server/port").toInt();
+	this->port = config("server/port", 10052).toInt();
 
 	this->tcpServer = new QTcpServer(this);
 	this->udpSocket = new QUdpSocket(this);
@@ -16,9 +16,6 @@ Server::Server(QObject* parent) :
 	connect(this->udpSocket, SIGNAL(readyRead()), this, SLOT(udpProcessPackets()));
 
 	this->listserver = new Listserver(this);
-
-
-
 }
 
 // destructor, stop the server and delete the pointers
@@ -130,7 +127,6 @@ void Server::udpProcessPackets() {
 				dataRead += readNow;
 				if (datagramSize > (datagram.size() - dataRead))
 					datagramSize = (datagram.size() - dataRead);
-
 			} else {
 				qWarning() << (QString("Socket error : ").arg(udpSocket->errorString()));
 				return;
@@ -139,4 +135,14 @@ void Server::udpProcessPackets() {
 
 		log("UDP: Packet id: "+QString().setNum(datagram[1]));
 	}
+}
+
+void Server::list() {
+	this->listserver->list();
+}
+void Server::delist() {
+	this->listserver->delist();
+}
+void Server::relist() {
+	this->listserver->relist();
 }

@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <QTcpSocket>
-
+#include <QTimer>
 
 class Listserver : public QObject {
 	Q_OBJECT
@@ -11,7 +11,17 @@ class Listserver : public QObject {
 	private:
 		QTcpSocket* listserverSock; // Socket to the listserver
 
+		int timeout;
+		int reconnectDelay;
+		QTimer* timeoutTimer;
+		QTimer* reconnectTimer;
+
+		bool instantReconnect;
+		bool unexpectedDisconnect;
+
 		QStringList listservers;
+		int currentServer;
+
 		unsigned short listPort;
 		bool isListed;
 
@@ -29,6 +39,8 @@ class Listserver : public QObject {
 		void delist();
 		void relist();
 
+		void sendListPacket();
+
 	signals:
 		void log(QVariant msg);
 		QVariant config(QString key, QVariant def = 0);
@@ -38,9 +50,12 @@ class Listserver : public QObject {
 		void listProcessPackets();
 		void listDisconnected();
 		void listError();
+		void listTimeout();
+
+		void listReconnect();
 };
 
-struct PACKET_SERVERLIST_LIST {
+struct PACKET_LISTSERVER_LIST {
 	quint16 port;
 	char servername[33];
 	quint8 players;
@@ -52,4 +67,3 @@ struct PACKET_SERVERLIST_LIST {
 };
 
 #endif // LISTSERVER_H
-

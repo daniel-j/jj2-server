@@ -10,7 +10,7 @@ Application::Application(QStringList args, QObject* parent) :
 }
 
 Application::~Application() {
-	this->stopServer();
+	stopServer();
 	delete this->server;
 }
 
@@ -30,8 +30,30 @@ void Application::quit() {
 }
 
 void Application::runCommand(QString cmd) {
-	if (cmd == "quit") {
-		quit();
+	if (cmd.length() == 0) return;
+
+	// Is it a command?
+	if (cmd.at(0) == '/') {
+		cmd = cmd.mid(1); // Remove the slash
+
+		if (cmd == "quit") {
+			quit();
+
+		} else if (cmd == "serverstop") {
+			stopServer();
+		} else if (cmd == "serverstart") {
+			startServer();
+
+		} else if (cmd == "list") {
+			this->server->list();
+		} else if (cmd == "delist") {
+			this->server->delist();
+		} else if (cmd == "relist") {
+			this->server->relist();
+
+		} else {
+			log("Unknown command "+cmd);
+		}
 	}
 }
 
@@ -42,5 +64,6 @@ void Application::startServer() {
 }
 
 void Application::stopServer() {
+	log("App: Stopping server");
 	this->server->stop();
 }

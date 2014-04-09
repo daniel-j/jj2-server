@@ -28,6 +28,10 @@ class Server : public QObject {
 		bool start();
 		void stop();
 
+		void list();
+		void delist();
+		void relist();
+
 	signals:
 		void log(QVariant msg);
 		QVariant config(QString key, QVariant def = 0);
