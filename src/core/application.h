@@ -19,17 +19,16 @@ class Application : public QObject {
 
 		QStringList args;
 		QSettings settings;
-		//ConsoleCommands* cc;
 
 	public:
 		explicit Application(QStringList args, QObject *parent = 0);
 		virtual ~Application();
 
+		void stopServer();
+		void startServer();
 
 		void log(QVariant msg);
-
 		void runCommand(QString cmd);
-
 		void quit();
 
 	signals:
@@ -41,8 +40,6 @@ class Application : public QObject {
 		void relist();
 
 	public slots:
-		void stopServer();
-		void startServer();
 		void logSlot(QVariant msg);
 		QVariant config(QString key, QVariant def = 0);
 

@@ -10,7 +10,7 @@ Application::Application(QStringList args, QObject* parent) :
 }
 
 Application::~Application() {
-	stopServer();
+	this->stopServer();
 	delete this->server;
 }
 
@@ -40,9 +40,9 @@ void Application::runCommand(QString cmd) {
 			quit();
 
 		} else if (cmd == "serverstop") {
-			stopServer();
+			this->stopServer();
 		} else if (cmd == "serverstart") {
-			startServer();
+			this->startServer();
 
 		} else if (cmd == "list") {
 			this->server->list();
