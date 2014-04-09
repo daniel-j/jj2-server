@@ -5,6 +5,8 @@
 #include <QTcpSocket>
 #include <QUdpSocket>
 
+#include "listserver.h"
+
 class Server : public QObject {
 
 	Q_OBJECT
@@ -12,7 +14,8 @@ class Server : public QObject {
 	private:
 		QTcpServer* tcpServer;
 		QList<QTcpSocket *> tcpClientsList;
-		QTcpSocket* listserverSock; // Socket to the listserver
+		Listserver* listserver;
+
 		QUdpSocket* udpSocket;
 		unsigned short port;
 
@@ -27,7 +30,7 @@ class Server : public QObject {
 
 	signals:
 		void log(QVariant msg);
-		QVariant config(QString key);
+		QVariant config(QString key, QVariant def = 0);
 
 	private slots:
 		void tcpConnectClient();

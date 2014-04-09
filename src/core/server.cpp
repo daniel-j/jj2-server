@@ -1,15 +1,34 @@
 #include "server.h"
+#include "application.h"
 
+// constructor, initialize stuff here
 Server::Server(QObject* parent) :
 	QObject(parent)
 {
-	this->port = 0;
-	this->tcpServer = NULL;
-	this->udpSocket = NULL;
-	this->listserverSock = NULL;
+	connect(this, SIGNAL(log(QVariant)), this->parent(), SLOT(logSlot(QVariant)));
+	connect(this, SIGNAL(config(QString, QVariant)), this->parent(), SLOT(config(QString, QVariant)));
+
+	this->port = config("server/port").toInt();
+
+	this->tcpServer = new QTcpServer(this);
+	this->udpSocket = new QUdpSocket(this);
+	connect(this->tcpServer, SIGNAL(newConnection()), this, SLOT(tcpConnectClient()));
+	connect(this->udpSocket, SIGNAL(readyRead()), this, SLOT(udpProcessPackets()));
+
+	this->listserver = new Listserver(this);
+
+
+
 }
+
+// destructor, stop the server and delete the pointers
 Server::~Server() {
 	this->stop();
+
+	//disconnect(this->tcpServer, SIGNAL(newConnection()), this, SLOT(tcpConnectClient()));
+	delete this->tcpServer;
+	delete this->udpSocket;
+	delete this->listserver;
 }
 
 void Server::setPort(int port) {
@@ -17,67 +36,50 @@ void Server::setPort(int port) {
 }
 
 bool Server::start() {
-	this->tcpServer = new QTcpServer(this);
+
 	log("TCP: Starting server on port "+QString().setNum(this->port)+" ...");
 	if (!this->tcpServer->listen(QHostAddress::Any, this->port)) {
 		log("TCP: Unable to start server");
 		this->stop();
 		return false;
 	}
+
 	log("UDP: Starting server on port "+QString().setNum(this->port)+" ...");
-	this->udpSocket = new QUdpSocket(this);
 	if (!udpSocket->bind(this->port, QUdpSocket::ReuseAddressHint|QUdpSocket::DontShareAddress)) {
 		log("UDP: Unable to start server");
-
 		this->stop();
 		return false;
 	}
-	this->listserverSock = new QTcpSocket(this);
-	this->listserverSock->connectToHost(config("listserver/host").toString(), 10054);
 
-	connect(this->listserverSock, SIGNAL(connected()), this, SLOT(listConnected()));
-	connect(this->listserverSock, SIGNAL(readyRead()),this, SLOT(listProcessPackets()));
-	connect(this->listserverSock, SIGNAL(disconnected()),this, SLOT(listDisconnected()));
+	this->listserver->start();
+
 	/*{
 		log("LIST: Could not connect to listserver");
 		delete this->listserverSock;
 		this->listserverSock = NULL;
 	}*/
-	connect(this->tcpServer, SIGNAL(newConnection()), this, SLOT(tcpConnectClient()));
-	connect(this->udpSocket, SIGNAL(readyRead()),this, SLOT(udpProcessPackets()));
+
 	return true;
 }
 
 void Server::stop() {
-	if (this->tcpServer != NULL) {
-		log("TCP: Stopping server..");
-		tcpServer->close();
+	if (this->tcpServer->isListening()) {
+		log("TCP: Stopping server...");
 		for (int i = 0; i < this->tcpClientsList.size(); i++) {
 			// else the disconnect slot is called when closing server
 			disconnect(this->tcpClientsList[i], SIGNAL(disconnected()), this, SLOT(tcpDisconnectClient()));
 			this->tcpClientsList[i]->close();
 		}
+		tcpServer->close();
 		this->tcpClientsList.clear();
-
-		//disconnect(this->tcpServer, SIGNAL(newConnection()), this, SLOT(tcpConnectClient()));
-
-		delete this->tcpServer;
-		this->tcpServer = NULL;
 	}
 
-	if (this->udpSocket != NULL) {
+	if (this->udpSocket->state() == QUdpSocket::BoundState) {
 		log("UDP: Stopping server..");
 		this->udpSocket->close();
-		delete this->udpSocket;
-		this->udpSocket = NULL;
 	}
 
-	if (this->listserverSock != NULL) {
-		log("LIST: Disconnecting from listserver");
-		this->listserverSock->close();
-		delete this->listserverSock;
-		this->listserverSock = NULL;
-	}
+	this->listserver->stop();
 }
 
 void Server::tcpConnectClient() {
