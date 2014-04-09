@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QTcpSocket>
 
+
 class Listserver : public QObject {
 	Q_OBJECT
 
@@ -37,7 +38,17 @@ class Listserver : public QObject {
 		void listProcessPackets();
 		void listDisconnected();
 		void listError();
+};
 
+struct PACKET_SERVERLIST_LIST {
+	quint16 port;
+	char servername[33];
+	quint8 players;
+	quint8 capacity;
+	quint8 isPrivate : 1;
+	quint8 gametype : 3;
+	quint8 unknownFlag : 4;
+	char version[4];
 };
 
 #endif // LISTSERVER_H

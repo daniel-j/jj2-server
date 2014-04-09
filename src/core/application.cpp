@@ -6,11 +6,12 @@ Application::Application(QStringList args, QObject* parent) :
 	settings(QDir::currentPath()+"/"+DATA_DIR+"/"+SETTINGS_FILE, QSettings::IniFormat)
 {
 	this->args = args;
-	this->server = NULL;
+	this->server = new Server(this);
 }
 
 Application::~Application() {
 	this->stopServer();
+	delete this->server;
 }
 
 void Application::log(QVariant msg) {
@@ -36,14 +37,10 @@ void Application::runCommand(QString cmd) {
 
 void Application::startServer() {
 	log("App: Starting server");
-	this->server = new Server(this);
 
 	this->server->start();
 }
 
 void Application::stopServer() {
-	if (this->server != NULL) {
-		delete this->server;
-		this->server = NULL;
-	}
+	this->server->stop();
 }
